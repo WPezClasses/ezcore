@@ -15,7 +15,11 @@
 /*
  * == CHANGE LOG == 
  *
- * --- Sun 11 Aug 2013 - Added: implode_obj()
+ *  -- Mon 5 May 2013 - Added ez_validate_url()
+ *
+ *  -- Wed 3 April 2013 - Added: responsive_decode()
+ *
+ *  -- Sun 11 Aug 2013 - Added: implode_obj()
  */
 
  
@@ -139,6 +143,128 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 			}
 	
 			return true;
+		}
+
+  /**
+   * Similar to PHP's Filter: VALIDATE URL but with a bit more fire-power.  
+   *
+   * Takes an array of URLs: loops thru to checks each for a scheme (protocol), if none, adds the (default) protocol, then runs that past FILTER_VALIDATE_URL. returns the first valid URL in the array to pass, else returns false;
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	string		$arg1	key = 'protocol' - e.g. 'https://'. Default: 'http://'
+   * @param 	array		$arg2	key = 'urls' - array of the strings to be VALIDATE URL'ed. The first to pass, will - if necessary - be prefixed with the protocol.
+   *
+   * @return int the integer of the set mode used. FALSE if foo foo could not be set.
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
+
+    static public function ez_validate_url( $arr_args = array() ){
+	
+	  if ( self::array_pass($arr_args) && self::array_key_pass( $arr_args,'urls' ) ){
+	    $arr_defaults = array(
+	                      'protocol' => 'http://'
+						);
+						
+        $arr_args = array_merge($arr_defaults, $arr_args);
+		//$arr_urls = $arr_args['urls']
+	
+		foreach ( $arr_args['urls'] as $str_url ){
+		
+		  $arr_parse_url = parse_url($str_url);
+		  if ( ! isset($arr_parse_url['scheme']) || empty($arr_parse_url['scheme']) ){
+		    $str_url = $arr_args['protocol'] . $str_url;
+		  }
+		  if ( filter_var($str_url, FILTER_VALIDATE_URL) ){
+            return $str_url;
+		  }
+	    }
+		return false;
+      }
+	}
+	
+		
+		/**
+		 * 
+		 *
+		 * 
+		 *
+		 * @author Mark Simchock <mark.simchock@alchemyunited.com>
+		 * 
+		 * @param 	string	$str_to_decode		explodes a hyphen'ed string.
+		 *                     		
+		 * @return	sting						framework friendly class        
+		 */
+		 
+		/*
+		 * == CHANGE LOG == 
+		 *
+		 */
+		static public function responsive_decode($str_to_decode = array()){
+		
+			if ( ! is_string($str_to_decode) || empty($str_to_decode) ){
+				return false;
+			}
+			
+			$arr_to_decode = explode( '-' , $str_to_decode);
+			/**
+			 * [0] = the framework, so we should have at least one [1], else something is wrong with the str in. 
+			 */
+			if ( isset($arr_to_decode[1]) ){
+				// what framework?
+				$str_framework = $arr_to_decode[0]; 
+				// get the framework presets
+				$arr_framework = self::responsive_decode_presets($str_framework);
+				// remove the framework and reindex the array
+				unset($arr_to_decode[0]);
+				$arr_to_decode = array_merge($arr_to_decode);
+				// build the class array
+				$arr_return = array();
+				foreach ( $arr_to_decode as $int_key => $int_value ){
+					if ( isset($arr_framework[$int_key]) ){
+						$arr_return[] = $arr_framework[$int_key] . $int_value;
+					}
+				}
+				// implode the array into a string
+				return implode(' ', $arr_return);
+			}	
+		}
+		
+		protected function responsive_decode_presets($str_framework = ''){
+		
+			switch($str_framework){
+			
+				// bootstrap 3.x
+				case 'bs3':
+				
+					return array(
+								'col-xs-',
+								'col-sm-',
+								'col-md-',
+								'col-lg-',
+								'col-xl-',
+								);
+								
+				break;
+				
+				default:
+				
+					return array(
+								'col-xs-',
+								'col-sm-',
+								'col-sm-',
+								'col-lg-',
+								'col-xl-',
+								);
+								
+				break;
+			
+			}
 		}
 		
 	
@@ -474,7 +600,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		
 		
 		/**
-		 * Returns the path to there WP is installed
+		 * Returns the *path* to there WP is installed
 		 *
 		 * TODO 
 		 *
