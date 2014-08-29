@@ -188,6 +188,149 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
       }
 	}
 	
+	
+  /**
+   * Is the value passed in true
+   * 
+   * Useful for testing arrays and not having to do: ( isset($arr['key']) && $arr['key'] === true )
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	mixed		$mixed	
+   *
+   * @return bool  true if mixed is true, else false.
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
+
+    static public function ez_true( $mixed = '' ){
+	
+	  $bool_ret = false;
+	  if ($mixed === true){
+	     $bool_ret = true;
+	  } 
+	  return $bool_ret;
+	}
+	
+	
+  /**
+   * Is the value passed in false
+   * 
+   * Useful for testing arrays and not having to do: ( isset($arr['key']) && $arr['key'] === true )
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	mixed		$mixed	
+   *
+   * @return bool  false if mixed is false, else true.
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
+
+    static public function ez_false( $mixed = '' ){
+	
+	  $bool_ret = true;
+	  if ($mixed === false){
+	     $bool_ret = false;
+	  } 
+	  return $bool_ret;
+	}
+	
+	
+  /**
+   * Similar to WP's get_template_part() 
+   *
+   * Adds a bool flag in order to bypass the get_template_part attempt
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	string		$str_slug		The slug name for the generic template. (required) 
+   * @param 	string		$str_name		The name of the specialized template. (optional) 
+   * @param 	bool		$bool_active	must be true to continue, anything else is considered false
+   *
+   * @return 	bool						if bool_active === false || str_slug == '', else returns true. 
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
+
+    static public function ez_gtp( $str_slug = '', $str_name = '',  $bool_active = true ) {
+	
+	  if ( $bool_active !== true  || ! is_string($str_slug) || $str_slug == '' ) {
+	    return false;
+	  }
+	  get_template_part($str_slug, $str_name);
+
+	}
+	
+	
+  /**
+   * Similar to WP's dynamic_sidebar(). Ref: http://codex.wordpress.org/Function_Reference/dynamic_sidebar
+   *
+   * Adds a bool flag in order to bypass the get_template_part attempt
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	string		$str_index		Name or ID of dynamic sidebar (optional) 
+   * @param 	bool		$bool_active	must be true to continue, anything else is considered false
+   *
+   * @return 	bool						if bool_active === false || str_slug == '', else returns true. 
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
+
+    static public function ez_ds( $str_index = '', $bool_active = true ) {
+	
+	  if ( $bool_active !== true || ! is_string($str_index) ) {
+	    return false;
+	  }
+	  dynamic_sidebar($str_index);
+
+	}
+	
+  /**
+   * Similar to WP's is_active_sidebar(). Ref: http://codex.wordpress.org/Function_Reference/is_active_sidebar
+   *
+   * Adds a bool flag in order to bypass the get_template_part attempt
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	string		$str_index		Name or ID of dynamic sidebar (optional) 
+   * @param 	bool		$bool_active	must be true to continue, anything else is considered false
+   *
+   * @return 	bool						 
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
+
+    static public function ez_ias( $str_index = '', $bool_active = true ) {
+	
+	  if ( $bool_active !== true || ! is_string($str_index) ) {
+	    return false;
+	  }
+	  
+	  return is_active_sidebar($str_index);
+	}
+	
 		
 		/**
 		 * 
@@ -350,7 +493,9 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		
 		
 		/**
-		 * Takes an array of arrays, checks them for their array-ness and then does an array_merge. More or less PHP array_merge without pulling an error if you one of the arrays is not an array. 
+		 * Similar to PHP array_merge() but...
+		 *
+		 * Takes an array of args, checks them for their array-ness and then does an array_merge. More or less PHP array_merge without pulling an error if you one of the arrays is not an array. 
 		 *
 		 * No need to worry if one of your arrays is not an array. Merge is done from "left to right" just like traditional array_merge() (@link http://php.net/manual/en/function.array-merge.php)
 		 *
@@ -358,14 +503,14 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * 
 		 * @param 	array	$arr_args		an array of the arrays to be array_merged
 		 *                     		
-		 * @return array. FALSE if params don't pass simple validation          
+		 * @return	array 					merged $arr_args, else false if params don't pass simple validation          
 		 */
 		 
 		/*
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function array_merge_ez($arr_args){
+		static public function ez_array_merge($arr_args){
 		
 			if ( is_array($arr_args)){
 				$arr_clean = array();

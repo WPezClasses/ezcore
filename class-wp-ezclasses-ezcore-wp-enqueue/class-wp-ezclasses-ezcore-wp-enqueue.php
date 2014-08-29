@@ -181,7 +181,6 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 			if ( is_array($arr_args) ){
 				$obj_general_conditional_tags = Class_WP_ezClasses_ezCore_Conditional_Tags::ezc_get_instance();
 				
-
 				foreach ( $arr_args as $str_key => $arr_value ) {
 
 					$arr_ret = $obj_general_conditional_tags->conditional_tags_evaluate($arr_value['conditional_tags']);

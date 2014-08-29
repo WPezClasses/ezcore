@@ -35,8 +35,8 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-if (!class_exists('Class_WP_ezClasses_Core_DevTools_Log')) {
-	class Class_WP_ezClasses_Core_DevTools_Log extends Class_WP_ezClasses_Master_Singleton {
+if (!class_exists('Class_WP_ezClasses_ezCore_DevTools_Log')) {
+	class Class_WP_ezClasses_ezCore_DevTools_Log extends Class_WP_ezClasses_Master_Singleton {
 	
 		protected $_arr_args;
 		

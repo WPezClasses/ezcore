@@ -34,15 +34,14 @@ if (! class_exists('Class_WP_ezClasses_ezCore_Conditional_Tags') ) {
 
 		}
 		
-
 		/**
 		 * Takes an array of format conditional_tag => condition, evaluates across the entire array and returns true or false
 		 *
 		 * A simplified programatic if conditional for WP conditional tags. Example: Use this method for defining which .js files should be enqueue'd when.  
 		 *
 		 * - arr_args[]
-		 * --- 'not'		'', '!' or true - Take the tags + operator evalution and invert it? Default: ''.
-		 * --- 'operator'	'and' or 'or' - How should the elements of the tags array be evaluted? Default: 'and'.
+		 * --- 'not'		'', '!' or true - Take the tags + operator evalution and invert it? Default: '' (i.e., no not)
+		 * --- 'operator'	'and' or 'or' - How should the elements of the 'tags' array be evaluted? Default: 'and'.
 		 * --- 'tags'		array( conditional_tag1 => condition1, conditional_tag2 => condition2...)
 		 */ 
 		public function conditional_tags_evaluate($arr_args = NULL){
@@ -279,7 +278,13 @@ if (! class_exists('Class_WP_ezClasses_ezCore_Conditional_Tags') ) {
 		
 			return array(	
 						'get_option'					=> array('status' => true, 'bool_only' => false),
-
+						'is_active_sidebar'				=> array('status' => true, 'bool_only' => false),
+						'wp_attachment_is_image'		=> array('status' => true, 'bool_only' => true),
+						
+						'is'							=> array('status' => true, 'bool_only' => true),
+						'is_IIS'						=> array('status' => true, 'bool_only' => true),
+						'is_iis7'						=> array('status' => true, 'bool_only' => true),
+												
 					);
 		}
 
@@ -302,102 +307,6 @@ if (! class_exists('Class_WP_ezClasses_ezCore_Conditional_Tags') ) {
 						'is_IE'			=> array('status' => true, 'bool_only' => true),
 					);
 		}
-
-
-		
-		
-/*=====================================================
-		 * - is_blog()
-		 * 
-		 * -- Am I in a template that's somehow blog related? Or not?
-		 * -- Supplement to the standard conditional tags: http://codex.wordpress.org/Conditional_Tags
-		 *
-		 * TODO - the 'false' list needs to be built out more? 
-		 * TODO - what about post type? A custom post type could return "true" and not be a "blog". 
-		 * TODO - arr_args??
-		 */
-/*
-		public function is_blog($arr_args = NULL) {
-		
-			global $post;
-			global $wp_query;
-			
-			if ( $post->post_type == 'post') {
-				if ( is_search() || is_404() || is_page() || is_attachment() || is_admin() ) {
-					return false;
-				}
-				return true;
-			} 
-			return false;
-		}
-*/
-
-		/**
-		 * TODO - More or less the reverse of the standard conditional tags: http://codex.wordpress.org/Conditional_Tags. Will return an array of any conditional_tag() === true
-		 * 
-		 * That is, instead of testing for different conditions, this method returns an array of all the conditions that are currently true
-		 *
-		 */
-/*
-		public function get_conditional_tags(  $wp_ezc_blog_granular = true, $wp_ezc_archive_granular = true ) {
-		
-			$arr_ret = array();
-			$arr_tags_supported = array_merge($this->conditional_tags_supported(), $this->browser_detection_supported(), $this->conditional_tags_only_in_loop_supported(), $this->conditional_tags_other_supported());
-
-			foreach ($arr_tags_supported as $str_tag => $arr_value) {
-			
-					// browser_detection_supported() tags are a special case and we need to work some slightly different magic
-					$arr_bts = $this->browser_detection_supported();
-					if ( isset($arr_bts[$str_tag])){
-						global $$str_tag;
-						if ($str_tag === true){
-							$arr_ret[] = $str_tag;
-						} 
-					} elseif ($str_tag() === true) {
-						$arr_ret[] = $str_tag;
-					}
-			}
-		
-		
-			if (((!$wp_ezc_blog_granular) && ( is_home() || is_single())) || ( !$wp_ezc_archive_granular && !$wp_ezc_blog_granular && is_archive() )) {
-				return 'is-blog';
-			} elseif ( is_home()){
-				return 'is_home';
-			} elseif ( is_front_page() ){
-				return 'is_front_page';
-			} elseif ( is_page() ){
-				return 'is_page';
-			} elseif ( is_single() ){
-				return 'is_single';
-			} elseif ( is_archive() ) {
-				if ( !$wp_ezc_archive_granular ) {
-					return 'is_archive';
-				} elseif ( is_category() ) {
-					return 'is_category';
-				} elseif ( is_tag() ){ 
-					return 'is_tag';
-				} elseif ( is_author() ){ 
-					return 'is_author';
-				} elseif ( is_tax() ){ 
-					return ('is_tax');
-				} elseif ( is_year() ){ 
-					return 'is_year';
-				} elseif ( is_date() ){ 
-					return 'is_date';
-				}	
-			} elseif ( self::wp_ezc_is_blog() ){ // TODO - This next coming into play - without some sort of arg
-				return 'is_blog';
-			} elseif ( is_404() ){
-				return 'is_404';
-			} elseif ( is_search() ){
-				return 'is_search';
-			}				
-		}
-		
-=================================== */				
-		
 		
 	}  // close: class
 } // close: if class_exists
-
-?>
