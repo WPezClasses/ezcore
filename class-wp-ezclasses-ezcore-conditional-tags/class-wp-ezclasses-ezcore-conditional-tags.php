@@ -280,6 +280,7 @@ if (! class_exists('Class_WP_ezClasses_ezCore_Conditional_Tags') ) {
 						'get_option'					=> array('status' => true, 'bool_only' => false),
 						'is_active_sidebar'				=> array('status' => true, 'bool_only' => false),
 						'wp_attachment_is_image'		=> array('status' => true, 'bool_only' => true),
+						'current_user_can'				=> array('status' => true, 'bool_only' => false),  // NOTE: args are NOT supported, just the capability
 						
 						'is'							=> array('status' => true, 'bool_only' => true),
 						'is_IIS'						=> array('status' => true, 'bool_only' => true),
