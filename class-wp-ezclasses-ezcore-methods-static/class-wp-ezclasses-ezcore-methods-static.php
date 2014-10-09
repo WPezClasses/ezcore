@@ -209,8 +209,8 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
    *
    */
 
-    static public function get_image_sizes( $str_size = '' ){
-	
+    static public function get_image_sizes( $str_get_size = '' ){
+
 	  $arr_native_sizes = array( 'thumbnail', 'medium', 'large' );
 	
 	  global $_wp_additional_image_sizes;
@@ -239,16 +239,15 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
       }
 
 	  // Get only 1 size if found
-      if ( $str_size ) {
+      if ( $str_get_size ) {
 	    
-		if( isset( $arr_sizes[ $str_size ] ) ) {
+		if( isset( $arr_sizes[ $str_get_size ] ) ) {
 		
-		  return $arr_sizes[ $_str_size ];
+		  return $arr_sizes[ $str_get_size ];
         } else {
 		  return false;
 		}
 	  }
-	  
 	  return $arr_sizes;
 	}	
 
