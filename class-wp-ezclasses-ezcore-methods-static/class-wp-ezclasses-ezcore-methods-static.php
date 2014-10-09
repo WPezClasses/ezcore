@@ -15,11 +15,13 @@
 /*
  * == CHANGE LOG == 
  *
+ *  -- Thur 9 Oct 2014 - Added: get_image_sizes() 
+ *
+ *  -- Sun 11 Aug 2013 - Added: implode_obj()
+ *
  *  -- Mon 5 May 2013 - Added ez_validate_url()
  *
  *  -- Wed 3 April 2013 - Added: responsive_decode()
- *
- *  -- Sun 11 Aug 2013 - Added: implode_obj()
  */
 
  
@@ -188,6 +190,68 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
       }
 	}
 	
+
+  /**
+   * Get all current image sizes (native and custom) as well as their settings
+   * 
+   * As found here: http://codex.wordpress.org/Function_Reference/get_intermediate_image_sizes
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	mixed		$mixed	
+   *
+   * @return array()
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
+
+    static public function get_image_sizes( $str_size = '' ){
+	
+	  $arr_native_sizes = array( 'thumbnail', 'medium', 'large' );
+	
+	  global $_wp_additional_image_sizes;
+	  $arr_wp_additional_image_sizes = $_wp_additional_image_sizes;
+	  
+	  $arr_sizes = array();
+	  $arr_get_intermediate_image_sizes = get_intermediate_image_sizes();
+	  
+	  // Create the full array with sizes and crop info
+	  foreach( $arr_get_intermediate_image_sizes as $str_size ) {
+	  
+	    if ( in_array( $str_size, $arr_native_sizes ) ) {
+		
+		  $arr_sizes[ $str_size ]['width'] = get_option( $str_size . '_size_w' );
+		  $arr_sizes[ $str_size ]['height'] = get_option( $str_size . '_size_h' );
+		  $arr_sizes[ $str_size ]['crop'] = (bool) get_option( $str_size . '_crop' );
+		  
+		} elseif ( isset( $arr_wp_additional_image_sizes[ $str_size ] ) ) {
+		
+		  $arr_sizes[ $str_size ] = array( 
+		    'width' => $arr_wp_additional_image_sizes[ $str_size ]['width'],
+			'height' => $arr_wp_additional_image_sizes[ $str_size ]['height'],
+			'crop' =>  $arr_wp_additional_image_sizes[ $str_size ]['crop']
+           );
+		}
+      }
+
+	  // Get only 1 size if found
+      if ( $str_size ) {
+	    
+		if( isset( $arr_sizes[ $str_size ] ) ) {
+		
+		  return $arr_sizes[ $_str_size ];
+        } else {
+		  return false;
+		}
+	  }
+	  
+	  return $arr_sizes;
+	}	
+
 	
   /**
    * Is the value passed in true
@@ -713,7 +777,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function array_pass($arr = NULL){
+		static public function array_pass($arr = ''){
 			if ( isset($arr) && is_array($arr) && ! empty($arr) ){
 				return true;
 			}
@@ -736,7 +800,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function array_key_pass($arr = array(), $str_key){
+		static public function array_key_pass($arr = array(), $str_key = ''){
 			if ( isset($arr[$str_key]) && is_array($arr[$str_key]) && !empty($arr[$str_key]) ){
 				return true;
 			}
