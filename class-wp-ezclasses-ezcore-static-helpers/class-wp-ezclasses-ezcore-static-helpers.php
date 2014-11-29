@@ -15,13 +15,13 @@
 /*
  * == CHANGE LOG == 
  *
- *  -- Thur 9 Oct 2014 - Added: get_image_sizes() 
+ *  -- Thur 9 Oct 2014 - Added: ez_get_image_sizes() 
  *
- *  -- Sun 11 Aug 2013 - Added: implode_obj()
+ *  -- Sun 11 Aug 2013 - Added: ez_implode_obj()
  *
  *  -- Mon 5 May 2013 - Added ez_validate_url()
  *
- *  -- Wed 3 April 2013 - Added: responsive_decode()
+ *  -- Wed 3 April 2013 - Added: ez_responsive_decode()
  */
 
  
@@ -30,32 +30,21 @@ if ( !defined('ABSPATH') ) {
     die();
 }
 
-if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
-	class Class_WP_ezClasses_ezCore_Methods_Static extends Class_WP_ezClasses_Master_Singleton {
-	
+if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
+	class Class_WP_ezClasses_ezCore_Static_Helpers extends Class_WP_ezClasses_Master_Singleton {
+			
 		/**
-		* Var short description TODO
-		*
-		* Potential values are TODO
-		*
-		* @var string TODO
-		*/
-		
-		// instance of wpezToolsClassesLog for ->log()
-		protected $ezc_tools;
-		
-		/**
-		 * Note: We're not using the construct other than to get "global" properties defined in the master parent
+		 *
 		 */
 		protected function __construct(){
 			parent::__construct();
-		//	$this->ezc_tools = wpezToolsClassesLog::ezc_get_instance();  << TODO - Fix / update. Helpful for when debugging new methods.
 		}
 		
 		/**
 		 * 
 		 */
-		public function ezc_init(){}	
+		public function ezc_init(){
+		}	
 
 
 		
@@ -105,7 +94,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		*
 		*/
 
-		static public function get_stylesheet_directory_uri_ez( $str_folder_file_ext = array() ){
+		static public function ez_get_stylesheet_directory_uri( $str_folder_file_ext = array() ){
 
 			if ( is_string($str_folder_file_ext) ){
 	
@@ -129,7 +118,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		/*  
 		 * TODO - THIS IS UN-FULLY TESTED
 		 */
-		static public function file_exists_ez($str_url){
+		static public function ez_file_exists($str_url){
 		
 			// do we have a valid URL?
 			if( ! filter_var($str_url, FILTER_VALIDATE_URL) ) {
@@ -209,7 +198,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
    *
    */
 
-    static public function get_image_sizes( $str_get_size = '' ){
+    static public function ez_get_image_sizes( $str_get_size = '' ){
 
 	  $arr_native_sizes = array( 'thumbnail', 'medium', 'large' );
 	
@@ -411,7 +400,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function responsive_decode($str_to_decode = array()){
+		static public function ez_responsive_decode($str_to_decode = array()){
 		
 			if ( ! is_string($str_to_decode) || empty($str_to_decode) ){
 				return false;
@@ -425,7 +414,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 				// what framework?
 				$str_framework = $arr_to_decode[0]; 
 				// get the framework presets
-				$arr_framework = self::responsive_decode_presets($str_framework);
+				$arr_framework = self::ez_responsive_decode_presets($str_framework);
 				// remove the framework and reindex the array
 				unset($arr_to_decode[0]);
 				$arr_to_decode = array_merge($arr_to_decode);
@@ -441,7 +430,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 			}	
 		}
 		
-		protected function responsive_decode_presets($str_framework = ''){
+		protected function ez_responsive_decode_presets($str_framework = ''){
 		
 			switch($str_framework){
 			
@@ -491,7 +480,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function starts_with($str_haystack , $str_needle){
+		static public function ez_starts_with($str_haystack , $str_needle){
 		
 			return $str_needle === "" || strpos($str_haystack, $str_needle) === 0;
 		}
@@ -515,7 +504,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function ends_with($str_haystack , $str_needle){
+		static public function ez_ends_with($str_haystack , $str_needle){
 		
 			return $str_needle === "" || substr($str_haystack, -strlen($str_needle)) === $str_needle;
 		}
@@ -540,7 +529,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function implode_obj($str_glue, $obj_pieces, $str_property){
+		static public function ez_implode_obj($str_glue, $obj_pieces, $str_property){
 		
 			if ( is_string($str_glue) && is_object($obj_pieces) && is_string($str_property) ){
 									
@@ -607,7 +596,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		* - - Change Log - - 
 		*
 		*/
-		static public function switch_to_blog_ez($int_blog_id = NULL ){
+		static public function ez_switch_to_blog($int_blog_id = NULL ){
 		
 			if ( is_multisite() && is_int($int_blog_id) ) {
 				$int_current_blog_id = get_current_blog_id();
@@ -652,7 +641,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		* - - Change Log - - 
 		*
 		*/
-		static public function restore_current_blog_ez(){
+		static public function ez_restore_current_blog(){
 		
 			if ( is_multisite() ) {
 
@@ -685,7 +674,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		* - - Change Log - - 
 		*
 		*/		
-		static public function blog_id_pass($int_blog_id = NULL){
+		static public function ez_blog_id_pass($int_blog_id = NULL){
 		
 			if ( is_multisite() && is_int($int_blog_id) ) {
 			
@@ -718,7 +707,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		* - - Change Log - - 
 		*
 		*/
-		static public function lremove($str_needle = NULL, $str_haystack = NULL, $str_replace = ''){
+		static public function ez_lremove($str_needle = NULL, $str_haystack = NULL, $str_replace = ''){
 		
 			if ( $str_needle != NULL && $str_haystack != NULL && is_string($str_replace) ){
 				$str_new_haystack = preg_replace("!^.*" . $str_needle . "!s", $str_replace, $str_haystack);
@@ -743,7 +732,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function array_keys_for_value_true( $arr = array() ){
+		static public function ez_array_keys_for_value_true( $arr = array() ){
 		
 			// if we're not passed an array, we're going to return an empty array. 
 			if ( ! is_array($arr) ){
@@ -776,7 +765,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function array_pass($arr = ''){
+		static public function ez_array_pass($arr = ''){
 			if ( isset($arr) && is_array($arr) && ! empty($arr) ){
 				return true;
 			}
@@ -799,7 +788,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 * == CHANGE LOG == 
 		 *
 		 */
-		static public function array_key_pass($arr = array(), $str_key = ''){
+		static public function ez_array_key_pass($arr = array(), $str_key = ''){
 			if ( isset($arr[$str_key]) && is_array($arr[$str_key]) && !empty($arr[$str_key]) ){
 				return true;
 			}
@@ -816,7 +805,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		 *                     		
 		 * @return string TODO      
 		 */
-		static public function home_path() {
+		static public function ez_home_path() {
 			return str_replace( str_replace( home_url(), '', site_url() ), '', ABSPATH );
 		}
 		

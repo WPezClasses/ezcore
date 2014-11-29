@@ -8,16 +8,22 @@
  *
  * LICENSE: TODO
  *
- * @package WP ezClasses
+ * @package WPezClasses
  * @author Mark Simchock <mark.simchock@alchemyunited.com>
  * @since 0.5.0
  * @license TODO
  */
  
-/*
-* == Change Log == 
-*
-*/
+/**
+ * == Change Log == 
+ *
+ */
+
+
+if ( !defined('ABSPATH') ) {
+	header('HTTP/1.0 403 Forbidden');
+    die();
+}
 
 
 if (! class_exists('Class_WP_ezClasses_ezCore_Conditional_Tags') ) {

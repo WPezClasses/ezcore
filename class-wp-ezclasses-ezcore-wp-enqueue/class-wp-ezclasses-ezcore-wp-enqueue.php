@@ -28,9 +28,11 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 	  parent::__construct();
 	}
 		
-    public function ezc_init($arr_args = NULL){
-      $this->_arr_init = $this->init_defaults();
-
+    public function ezc_init($arr_args = ''){
+	
+	  $arr_init_defaults = $this->init_defaults();
+	  
+	  $this->_arr_init = WP_ezMethods::ez_array_merge(array($arr_init_defaults, $arr_args));
 	}
 		
     protected function init_defaults(){
