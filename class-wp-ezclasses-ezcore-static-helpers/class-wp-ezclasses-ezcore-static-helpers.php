@@ -32,6 +32,13 @@ if ( !defined('ABSPATH') ) {
 
 if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 	class Class_WP_ezClasses_ezCore_Static_Helpers extends Class_WP_ezClasses_Master_Singleton {
+	
+	  private $_version;
+	  private $_url;
+	  private	$_path;
+	  private $_path_parent;
+	  private $_basename;
+	  private $_file;
 			
 		/**
 		 *
@@ -43,9 +50,22 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 		/**
 		 * 
 		 */
-		public function ezc_init(){
+		public function ez__construct(){
+		
+		  $this->setup();
+		
 		}	
-
+		
+		protected function setup(){
+		
+		  $this->_version = '0.5.0';
+		  $this->_url = plugin_dir_url( __FILE__ );
+		  $this->_path = plugin_dir_path( __FILE__ );
+		  $this->_path_parent = dirname($this->_path);
+		  $this->_basename = plugin_basename( __FILE__ );
+		  $this->_file = __FILE__ ;
+		
+		}
 
 		
 // == Start: Boilerplate

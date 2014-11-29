@@ -1,4 +1,22 @@
-WP ezClasses: ezCore
-======
+# Org: WPezClasses
+### Product: ezCore
 
-Most / all of the essential WP ezClasses rolled up into a single repo. These are the building blocks that are used (i.e., dependencies) most often.
+##### The essential WPezClasses rolled up into a single repo. 
+
+These are the building blocks (i.e., dependencies) that are used the most often by other WPezClasses.
+
+============================================================
+
+####Overview
+
+Includes the following:
+
+- class-wp-ezclasses-ezcore-conditional-tags
+- class-wp-ezclasses-ezcore-devtools-log
+- class-wp-ezclasses-ezcore-static-helpers
+- class-wp-ezclasses-ezcore-wp-enqueue
+
+
+####Dependencies
+
+- TODO

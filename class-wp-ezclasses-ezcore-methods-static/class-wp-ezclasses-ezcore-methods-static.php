@@ -55,7 +55,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Methods_Static')) {
 		/**
 		 * 
 		 */
-		public function ezc_init(){}	
+		public function ez__construct(){}	
 
 
 		
