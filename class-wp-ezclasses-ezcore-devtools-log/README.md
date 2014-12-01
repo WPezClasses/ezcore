@@ -27,7 +27,7 @@ Using Class WP ezClasses DevTools Log
 - e.g. #1 - Basic
 
 ```
-$obj_log = Class_WP_ezClasses_DevTools_Log::ezc_get_instance();
+$obj_log = Class_WP_ezClasses_DevTools_Log::ez_new();
 $x = array('A', 'B','C');
 $obj_log->log($x);
 ```
@@ -40,7 +40,7 @@ $arr_local_log_args = array(
 						'log_file' 				=> 'debug2.log',
 					);
 
-$obj_log = Class_WP_ezClasses_DevTools_Log::ezc_get_instance();
+$obj_log = Class_WP_ezClasses_DevTools_Log::ez_new();
 $x = array('A', 'B','C');
 $obj_log->log($x, $arr_local_log_args);
 ```

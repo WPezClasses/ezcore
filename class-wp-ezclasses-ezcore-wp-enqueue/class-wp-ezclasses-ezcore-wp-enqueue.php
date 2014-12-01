@@ -41,7 +41,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 	
 	  $arr_init_defaults = $this->init_defaults();
 	  
-	  $this->_arr_init = WP_ezMethods::ez_array_merge(array($arr_init_defaults, $arr_args));
+	  $this->_arr_init = WPezHelpers::ez_array_merge(array($arr_init_defaults, $arr_args));
 	}
 		
     protected function init_defaults(){
@@ -72,13 +72,13 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 	 */ 
     public function ez_rs($arr_args = ''){
 	
-	  if ( ! WP_ezMethods::array_pass($arr_args) ){
+	  if ( ! WPezHelpers::ez_array_pass($arr_args) ){
 	    return array('status' => false, 'msg' => 'ERROR: arr_args is not valid', 'source' => get_class() . ' ' . __METHOD__, 'arr_args' => 'error');
 	  }
 
-	    $arr_args = WP_ezMethods::ez_array_merge(array( $this->_arr_init, $arr_args)); 
+	    $arr_args = WPezHelpers::ez_array_merge(array( $this->_arr_init, $arr_args)); 
 	
-	    if ( $arr_args['active'] === true && WP_ezMethods::array_pass($arr_args['arr_args']) ){
+	    if ( $arr_args['active'] === true && WPezHelpers::ez_array_pass($arr_args['arr_args']) ){
 		
 		  $arr_wp_register = $arr_args['arr_args'];
 
@@ -115,7 +115,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 				/**
 				 * returns arr_args that are active. if you don't really have an active => false then checking this is not really necessary (but it can help). 
 				 */
-				if ( WP_ezMethods::ez_true($arr_args['active_true']) ){
+				if ( WPezHelpers::ez_true($arr_args['active_true']) ){
 				
 					$arr_active_true_response = $this->wp_register_enqueue_active_true($arr_wp_register);
 					
@@ -143,13 +143,13 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 	 */ 
     public function ez_es($arr_args = ''){
 	
-	  if ( ! WP_ezMethods::array_pass($arr_args) ){
+	  if ( ! WPezHelpers::ez_array_pass($arr_args) ){
 	    return array('status' => false, 'msg' => 'ERROR: arr_args is not valid', 'source' => get_class() . ' ' . __METHOD__, 'arr_args' => 'error');
 	  }
 	  
-	    $arr_args = WP_ezMethods::ez_array_merge(array( $this->_arr_init, $arr_args)); 
+	    $arr_args = WPezHelpers::ez_array_merge(array( $this->_arr_init, $arr_args)); 
 	
-	    if ( $arr_args['active'] === true && WP_ezMethods::array_pass($arr_args['arr_args']) ){
+	    if ( $arr_args['active'] === true && WPezHelpers::ez_array_pass($arr_args['arr_args']) ){
 		
 		  $arr_wp_enque = $arr_args['arr_args'];
 
@@ -186,7 +186,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 				/**
 				 * returns arr_args that are active. if you don't really have an active => false then checking this is not really necessary (but it can help). 
 				 */
-				if ( WP_ezMethods::ez_true($arr_args['active_true']) ){
+				if ( WPezHelpers::ez_true($arr_args['active_true']) ){
 				
 					$arr_active_true_response = $this->wp_register_enqueue_active_true($arr_wp_enqueue);
 					
@@ -326,10 +326,10 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 		public function wp_register_enqueue_active_true($arr_args = '') {
 		  $str_return_source = get_class() . ' ' . __METHOD__;
 		
-			if ( WP_ezMethods::array_pass($arr_args) ) {
+			if ( WPezHelpers::ez_array_pass($arr_args) ) {
 				$arr_active_true = array();	
 				foreach ( $arr_args as $str_key => $arr_value ) {
-					if ( WP_ezMethods::ez_true($arr_value['active'] === true) ){
+					if ( WPezHelpers::ez_true($arr_value['active'] === true) ){
 						$arr_active_true[$str_key] = $arr_value;
 					}
 				}
@@ -345,12 +345,12 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 		public function wp_register_do($arr_args = ''){
 		  $str_return_source = get_class() . ' ' . __METHOD__;
 
-			if ( WP_ezMethods::array_pass($arr_args) ){
+			if ( WPezHelpers::ez_array_pass($arr_args) ){
 				
 				foreach ( $arr_args as $str_key => $arr_value ) {
 				
 				  // we'll slide the defaults underneath just in case
-				  $arr_value = WP_ezMethods::ez_array_merge(array($this->wp_enqueue_script_defaults(), $arr_value));
+				  $arr_value = WPezHelpers::ez_array_merge(array($this->wp_enqueue_script_defaults(), $arr_value));
 				
 				  // validation is a TODO
 				  if ( $arr_value['active'] === true ){
@@ -385,9 +385,9 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 		public function wp_enqueue_do($arr_args = ''){
 		  $str_return_source = get_class() . ' ' . __METHOD__;
 
-			if ( WP_ezMethods::array_pass($arr_args) ){
+			if ( WPezHelpers::ez_array_pass($arr_args) ){
 			
-				$obj_ezcore_conditional_tags = Class_WP_ezClasses_ezCore_Conditional_Tags::ezc_get_instance();
+				$obj_ezcore_conditional_tags = Class_WP_ezClasses_ezCore_Conditional_Tags::ez_new();
 				$arr_wp_enqueue_script_defaults = $this->wp_enqueue_script_defaults();
 				
 				foreach ( $arr_args as $str_key => $arr_value ) {

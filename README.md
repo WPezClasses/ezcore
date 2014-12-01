@@ -14,7 +14,7 @@ Includes the following:
 - class-wp-ezclasses-ezcore-conditional-tags
 - class-wp-ezclasses-ezcore-devtools-log
 - class-wp-ezclasses-ezcore-static-helpers
-- class-wp-ezclasses-ezcore-wp-enqueue
+- class-wp-ezclasses-ezcore-wp-enqueue (Example: https://github.com/WPezBoilerStrap/wp-ezboilerstrap-uno/blob/master/setup/uno/class-wp-ezboilerstrap-wp-register-enqueue.php)
 
 
 ####Dependencies
