@@ -15,13 +15,15 @@
 /*
  * == CHANGE LOG == 
  *
- *  -- Thur 9 Oct 2014 - Added: ez_get_image_sizes() 
+ * -- Mon 15 Dec 2014 - Added: ez_pairs_to_string()
  *
- *  -- Sun 11 Aug 2013 - Added: ez_implode_obj()
+ * -- Thur 9 Oct 2014 - Added: ez_get_image_sizes() 
  *
- *  -- Mon 5 May 2013 - Added ez_validate_url()
+ * -- Sun 11 Aug 2013 - Added: ez_implode_obj()
  *
- *  -- Wed 3 April 2013 - Added: ez_responsive_decode()
+ * -- Mon 5 May 2013 - Added ez_validate_url()
+ *
+ * -- Wed 3 April 2013 - Added: ez_responsive_decode()
  */
 
  
@@ -35,7 +37,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 	
 	  private $_version;
 	  private $_url;
-	  private	$_path;
+	  private $_path;
 	  private $_path_parent;
 	  private $_basename;
 	  private $_file;
@@ -94,67 +96,63 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 // == End: Boilerplate
 
 
+  /**
+   * Takes an associative array of value pairs and returns them as a string using 'symbol' and 'delimiter'
+   *
+   * Defaults: 'symbol' = '='. Defaukt 'glue' = ' '. 'sanitize' = true
+   *
+   * @author Mark Simchock <mark.simchock@alchemyunited.com>
+   * 
+   * @param 	array		$arg1	key = 'pairs' - the assoc array to be "stringed"
+   * @param 	string		$arg2	key = 'symbol'
+   * @param 	string		$arg3	key = 'delimiter'
+   *
+   * @return 	string
+   *             
+   */
+ 
+  /*
+   * - - Change Log - - 
+   *
+   */
 
-		/** TODO - THIS IS *VERY* EXPERIMENTAL (and 100% *untested*)
-		 *
-		 * Similar to get_stylesheet_directory_uri() but will fallback to the parent if the file does not exist in the child. If the parent parent doesn't have it, it returns ''
-		 *
-		 * Kinda like get_template_part but slightly different. 
-		 *
-		 * @author Mark Simchock <mark.simchock@alchemyunited.com>
-		 * 
-		 * @param 	string	$arg1	the string of 'folder/file.ext' - DO NOT include a leading slash
-		 *
-		 * @return string - get_stylesheet_directory_uri() if the file is in the child, get_template_directory_uri() if not and it's in the parent, else '' (blank) if neither have the folder/file
-		 *             
-		 */
-		 
-		/*
-		* - - Change Log - - 
-		*
-		*/
-
-		static public function ez_get_stylesheet_directory_uri( $str_folder_file_ext = array() ){
-
-			if ( is_string($str_folder_file_ext) ){
+    static public function ez_pairs_to_string( $arr_pairs = array(), $arr_defaults = array() ){
 	
-				$str_uri = get_stylesheet_directory_uri();
-				if ( self::file_exists_ez( $str_uri . $str_folder_file_ext ) ){
-				
-					return $str_uri;
-				
-				} else{
-					$str_uri = get_template_directory_uri();
-					if ( self::file_exists_ez( $str_uri . $str_folder_file_ext ) ){
-			
-					return $str_uri;
-					}
-				}	
-			}
-			return '';
-		
+	  if ( is_array($arr_pairs) && ! empty($arr_pairs) ){
+	  
+	    $str_symbol = '=';
+	    if ( isset($arr_defaults['symbol']) ){
+	      $str_symbol = $arr_defaults['symbol'];
 		}
 		
-		/*  
-		 * TODO - THIS IS UN-FULLY TESTED
-		 */
-		static public function ez_file_exists($str_url){
+		$str_glue = ' ';
+		if ( isset($arr_defaults['glue']) ){
+		  $str_glue = $arr_defaults['glue'];
+	    }
 		
-			// do we have a valid URL?
-			if( ! filter_var($str_url, FILTER_VALIDATE_URL) ) {
-
-				return false;
-			}
+		$bool_sanitize = true;
+		if ( isset($arr_defaults['sanitize']) ){
+		  $bool_sanitize = $arr_defaults['sanitize'];
+	    }
 		
-			// if the URL is good then we can check for the file
-			$str_file_headers = @get_headers($str_url);
-			if( strpos($str_file_headers[0], '404 Not Found') ) {
-			
-				return false;
-			}
-	
-			return true;
+		$arr_to_implode = array();
+		$arr_pairs = $arr_pairs;
+		foreach ( $arr_pairs as $str_key => $str_value){
+		  if ($bool_sanitize === true){
+		    $str_key = sanitize_text_field($str_key);
+			$str_value = sanitize_text_field($str_value);
+		  }
+		  // take the pair, jam the 'symbol' between them and add them to the array
+		  $arr_to_implode[] = $str_key . $str_symbol . $str_value;
 		}
+		// return a string using the 'glue'
+		return implode($str_glue, $arr_to_implode);
+	  }
+	  return ' data-bbb="bbb" ';
+	}
+
+
+
 
   /**
    * Similar to PHP's Filter: VALIDATE URL but with a bit more fire-power.  
@@ -828,6 +826,67 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 		static public function ez_home_path() {
 			return str_replace( str_replace( home_url(), '', site_url() ), '', ABSPATH );
 		}
+		
+		/** TODO - THIS IS *VERY* EXPERIMENTAL (and 100% *untested*)
+		 *
+		 * Similar to get_stylesheet_directory_uri() but will fallback to the parent if the file does not exist in the child. If the parent parent doesn't have it, it returns ''
+		 *
+		 * Kinda like get_template_part but slightly different. 
+		 *
+		 * @author Mark Simchock <mark.simchock@alchemyunited.com>
+		 * 
+		 * @param 	string	$arg1	the string of 'folder/file.ext' - DO NOT include a leading slash
+		 *
+		 * @return string - get_stylesheet_directory_uri() if the file is in the child, get_template_directory_uri() if not and it's in the parent, else '' (blank) if neither have the folder/file
+		 *             
+		 */
+		 
+		/*
+		* - - Change Log - - 
+		*
+		*/
+
+		static public function ez_get_stylesheet_directory_uri( $str_folder_file_ext = array() ){
+
+			if ( is_string($str_folder_file_ext) ){
+	
+				$str_uri = get_stylesheet_directory_uri();
+				if ( self::file_exists_ez( $str_uri . $str_folder_file_ext ) ){
+				
+					return $str_uri;
+				
+				} else{
+					$str_uri = get_template_directory_uri();
+					if ( self::file_exists_ez( $str_uri . $str_folder_file_ext ) ){
+			
+					return $str_uri;
+					}
+				}	
+			}
+			return '';
+		
+		}
+		
+		/*  
+		 * TODO - THIS IS UN-FULLY TESTED
+		 */
+		static public function ez_file_exists($str_url){
+		
+			// do we have a valid URL?
+			if( ! filter_var($str_url, FILTER_VALIDATE_URL) ) {
+
+				return false;
+			}
+		
+			// if the URL is good then we can check for the file
+			$str_file_headers = @get_headers($str_url);
+			if( strpos($str_file_headers[0], '404 Not Found') ) {
+			
+				return false;
+			}
+	
+			return true;
+		}		
 		
 	} // close class
 } // close if class exists
