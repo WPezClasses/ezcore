@@ -15,6 +15,10 @@
 /*
  * == CHANGE LOG == 
  *
+ * -- Thur 29 Jan 2015 - Added: ez_gpm_zero  (gpm = get_post_meta)
+ *
+ * -- Wed 31 Dec 2014 - Added: ez_wp_get_attachment_image
+ *
  * -- Fri 26 Dec 2014 - Added: ez_post_terms_pass()
  *
  * -- Tue 23 Dec 2014 - Added: ez_wp_query(), ez_get_post_meta(), ez_wp_get_post_terms()
@@ -98,6 +102,31 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 */
 
 // == End: Boilerplate
+
+
+    static public function ez_wp_get_attachment_image( $arr_args = array() ){
+	
+	  if ( ! is_array($arr_args) || empty($arr_args) ){
+	    return array();;
+	  }
+	  
+	  if ( isset($arr_args['attachment_id']) && isset($arr_args['sizes']) && is_array($arr_args['sizes']) ){
+	  
+	   // $str_icon = false;
+	   // if (isset($arr_args['icon']) && is_bool($arr_args['icon']) )
+	    $arr_attr_defaults = array();
+	    if ( isset($arr_args['attr']) &&  is_array($arr_args['attr']) ){
+	      $arr_attr_defaults = $arr_args['attr'];
+		}
+	  
+	  
+	  }
+
+	  
+	
+	
+	
+	}
 
   /**
    * WP_Query gets The ezWay treatment
@@ -225,7 +254,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 	  
 	    // make sure we only have a single post_type and it's: ! 'all' && ! empty() && ! is_array()
 	    if ( isset($arr_args['post_type']) && $arr_args['post_type'] != 'all' && ! empty($arr_args['post_type']) && is_string($arr_args['post_type']) ){
-		  // default: all the taxonomies for the post_type
+		  // default: ALL the taxonomies for the post_type
 		  $arr_args_ez['taxonomies'] = get_object_taxonomies($arr_args['post_type']);
 	    } else {
 		  // if it's not a single valid post_type then we're done.
@@ -1018,6 +1047,36 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 				return true;
 			}
 			return false;
+		}
+
+		/**
+		 * if the $pmg[$str_key] is an array, then return the [$str_key_2] (default: 0) of that array. 
+		 *
+		 * this is useful for working with what is returned by get_post_meta() with no arguments (i.e., an array of arrays).
+		 *
+		 * note: when getting Unix dates it's recommended you pass in an int for the $str_default_return
+		 *		
+		 * @author Mark Simchock <mark.simchock@alchemyunited.com>
+		 * 
+		 * @param 	TODO
+		 *                     		
+		 *   
+		 */
+		 
+		/*
+		 * == CHANGE LOG == 
+		 *
+		 */
+		static public function ez_gpm_zero($arr = array(), $str_key = '', $str_default_return = '', $str_key_2 = 0){
+		
+		  // does the (meta) key exist? and is it an array
+		  if ( self::ez_array_key_pass($arr, $str_key) ){
+		    // do we have a second dimension [0] (default)
+		    if ( isset($arr[$str_key][$str_key_2]) ){
+		      return $arr[$str_key][$str_key_2];
+			}
+		  }
+		  $str_default_return;
 		}		
 		
 		
