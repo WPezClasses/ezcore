@@ -360,12 +360,11 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 						if ( $arr_value['type'] == 'style' ){
 						
 							wp_register_style($arr_value['handle'], $arr_value['src'], $arr_value['deps'] ,$arr_value['ver'], $arr_value['media'] );
-		//	echo '<br>' .$arr_value['handle'] . $arr_value['src'] . ' - ' . $arr_value['deps'] . ' - ' . $arr_value['ver'] . $arr_value['media'] . '</br>';
-						} elseif ( $arr_value['type'] == 'script' ){
-		//	echo '<br>' .$arr_value['handle'] . $arr_value['src'] . ' - ' . $arr_value['deps'] . ' - ' . $arr_value['ver'] . $arr_value['in_footer'] . '</br>';
+
+							} elseif ( $arr_value['type'] == 'script' ){
 		
 							wp_register_script($arr_value['handle'], $arr_value['src'], $arr_value['deps'] ,$arr_value['ver'], $arr_value['in_footer'] );
-		//	echo '<br> script </br>';
+;
 						} else {
 						  // TODO - style must have been invalid. 
 						}
@@ -400,7 +399,11 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_WP_Enqueue') ) {
 					$arr_ret = $obj_ezcore_conditional_tags->conditional_tags_evaluate($arr_value['conditional_tags']);
 					if ( $arr_ret['status'] === true ){
 				//	echo $arr_value['handle'];
-						if ( wp_style_is($arr_value['handle'], 'registered') ){
+						if ( $arr_value['type'] == 'wp-script' ){
+						
+						   wp_enqueue_script($arr_value['handle'], false, $arr_value['deps'] ,false, true );
+
+						} elseif ( wp_style_is($arr_value['handle'], 'registered') ){
 						
 							wp_enqueue_style($arr_value['handle'] );
 			//echo $str_key . ' ';	
