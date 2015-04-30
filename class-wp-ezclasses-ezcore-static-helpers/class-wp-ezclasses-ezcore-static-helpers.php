@@ -12,8 +12,12 @@
  * @since 0.5.0
  */
  
-/*
- * == CHANGE LOG == 
+/**
+ * == CHANGE LOG ==
+ *
+ * -- Thur 30 April 2015 - Added: ez_get_post_class()
+ *
+ * -- Thur 2 April 2015 - Added: ez_array_key
  *
  * -- Thur 29 Jan 2015 - Added: ez_gpm_zero  (gpm = get_post_meta)
  *
@@ -305,6 +309,20 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 	  }
 	  return $arr_posts;
 	}
+
+        /**
+         * makes the post_class a property on the post object.
+         *
+         * TODO - comments
+         */
+        static public function ez_get_post_class( $arr_posts = array()){
+
+            foreach ($arr_posts as $obj_post){
+                $arr_gpc = get_post_class($obj_post->ID);
+                $obj_post->get_post_class = implode(' ', $arr_gpc);
+            }
+            return $arr_posts;
+        }
 	
 	/**
 	 * Similar to wp_get_post_terms() but loops over the whole $posts object
@@ -513,8 +531,14 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
    *
    */
 
-    static public function ez_true( $mixed = '' ){
-	
+    static public function ez_true( $mixed = '', $key = '' ){
+
+        if ( is_array($mixed) ){
+            if ( isset($mixed[$key]) ) {
+                $mixed = $mixed[$key];
+            }
+        }
+
 	  $bool_ret = false;
 	  if ($mixed === true){
 	     $bool_ret = true;
@@ -1047,6 +1071,27 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 				return true;
 			}
 			return false;
+		}
+		
+		/**
+		 * Tests to see if an array[key] is isset() and returns that value, else returns '' (or whatever you pass in).
+		 *		
+		 * @author Mark Simchock <mark.simchock@alchemyunited.com>
+		 * 
+		 * @param 	array	$arr_args		an array (or so we'll presume for the moment)
+		 *                     		
+		 * @return	mixed  
+		 */
+		 
+		/*
+		 * == CHANGE LOG == 
+		 *
+		 */
+		static public function ez_array_key($arr = array(), $str_key = '', $return_default = ''){
+			if ( isset($arr[$str_key]) ){
+				return $arr[$str_key];
+			}
+			return $return_default;
 		}
 
 		/**
