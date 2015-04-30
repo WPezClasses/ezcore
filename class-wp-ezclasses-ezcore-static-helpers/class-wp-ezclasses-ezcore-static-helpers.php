@@ -243,6 +243,14 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 		// }
 		$wp_query->posts = self::ez_get_post_meta($wp_query->posts);
 	  }
+
+        // default for get_post_meta is true. this is, if we're using ez_wp_query then we always want the post's post_meta unless we specify otherwise.
+        if ( ! isset($arr_args_ez['get_post_class']) || ( isset($arr_args_ez['get_post_class']) && $arr_args_ez['get_post_class'] !== false) ){
+            // foreach ($wp_query->posts as $wp_query_obj){
+            //  $wp_query_obj->get_post_meta = get_post_meta($wp_query_obj->ID);
+            // }
+            $wp_query->posts = self::ez_get_post_class($wp_query->posts);
+        }
 	  
 	  // if 'taxonomies' is false then we're done. the (eventual) default (below) is all taxs for the queried post_type
 	  if ( isset($arr_args_ez['taxonomies']) && $arr_args_ez['taxonomies'] === false ){
@@ -318,7 +326,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
         static public function ez_get_post_class( $arr_posts = array()){
 
             foreach ($arr_posts as $obj_post){
-                $arr_gpc = get_post_class($obj_post->ID);
+                $arr_gpc = get_post_class('',$obj_post->ID);
                 $obj_post->get_post_class = implode(' ', $arr_gpc);
             }
             return $arr_posts;
