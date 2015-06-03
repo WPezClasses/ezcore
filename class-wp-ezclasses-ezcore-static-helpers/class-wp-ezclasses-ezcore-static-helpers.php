@@ -312,7 +312,7 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
         static public function ez_get_post_thumbnail_id( $arr_posts = array()){
 
             foreach ($arr_posts as $obj_post){
-                $obj_post->get_post_thumbnail_id = ez_get_post_thumbnail_id($obj_post->ID);
+                $obj_post->get_post_thumbnail_id = get_post_thumbnail_id($obj_post->ID);
             }
             return $arr_posts;
         }
