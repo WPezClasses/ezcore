@@ -15,13 +15,17 @@
 /**
  * == CHANGE LOG ==
  *
+ * ==  Wed 3 June 2015
+ * --- ADDED: ez_get_post_thumbnail_id()
+ * --- CHANGED: ez_wp_query() - key for 'ez' args from (just) 'ez' to 'ez_args' to make add clarity
+ *
  * -- Thur 30 April 2015 - Added: ez_get_post_class()
  *
  * -- Thur 2 April 2015 - Added: ez_array_key
  *
  * -- Thur 29 Jan 2015 - Added: ez_gpm_zero  (gpm = get_post_meta)
  *
- * -- Wed 31 Dec 2014 - Added: ez_wp_get_attachment_image
+ * -- Wed 31 Dec 2014 - Added: ez_wp_get_attachment_image - TODO
  *
  * -- Fri 26 Dec 2014 - Added: ez_post_terms_pass()
  *
@@ -108,6 +112,12 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 // == End: Boilerplate
 
 
+        /**
+         * ???
+         *
+         * @param array $arr_args
+         * @return array
+         */
     static public function ez_wp_get_attachment_image( $arr_args = array() ){
 	
 	  if ( ! is_array($arr_args) || empty($arr_args) ){
@@ -125,11 +135,6 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 	  
 	  
 	  }
-
-	  
-	
-	
-	
 	}
 
   /**
@@ -198,18 +203,22 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
   /**
    * WP_Query gets The ezWay treatment
    *
-   * The general idea here is to centralize your "data grathering" prior to displaying it. this allows vues to focus (mostly) on presentation. 
+   * The general idea here is to centralize your "data grathering" prior to displaying it. this allows vou to focus (mostly) on presentation.
    *
    * @author Mark Simchock <mark.simchock@alchemyunited.com>
    * 
    * @param 	array		$arg1	key = 'ez' - an assoc array  with additional ez-centric args
-   *												- 'get_post_meta'	=> bool,  	// default: true
-   *																				// false: skip thip step
-   *												- 'taxonomies' 		=> mixed,	// - default: array filled by get_object_taxonomies('post_type')
-   *																				// - true: array filled by get_object_taxonomies('post_type').
-   *																				// - false: skip this step
-   *																				// - array(): of  just the taxonomies you want to get
-   *												- 'gpt_args'		=> array	// - array(): for get_post_terms args. See also: http://codex.wordpress.org/Function_Reference/wp_get_post_terms
+   *												- 'get_post_meta'	        => bool,    // default: true
+   *																				        // false: skip this step
+   *    											- 'get_post_thumbnail_id'   => bool,  	// default: true
+   *																				        // false: skip this step
+   *    *    										- 'get_post_class'          => bool,  	// default: true
+   *																				        // false: skip this step
+   *												- 'taxonomies' 		        => mixed,   // - default: array filled by get_object_taxonomies('post_type')
+   *																				        // - true: array filled by get_object_taxonomies('post_type').
+   *																				        // - false: skip this step
+   *																				        // - array(): of  just the taxonomies you want to get
+   *												- 'gpt_args'		        => array	// - array(): for get_post_terms args. See also: http://codex.wordpress.org/Function_Reference/wp_get_post_terms
    *
    * @return 	array		returns what WP_Query() would return with properties get_post_meta (assoc array) and wp_get_post_terms (assoc array) added to ->posts
    *             
@@ -222,10 +231,10 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 
     static public function ez_wp_query( $arr_args = array() ){
 	
-	  if ( isset($arr_args['ez']) && is_array($arr_args['ez']) && ! empty($arr_args['ez']) ){
+	  if ( isset($arr_args['ez_args']) && is_array($arr_args['ez_args']) && ! empty($arr_args['ez_args']) ){
 	    
-		$arr_args_ez = $arr_args['ez'];
-		unset($arr_args['ez']);
+		$arr_args_ez = $arr_args['ez_args'];
+		unset($arr_args['ez_args']);
 	  }
 	  
 	  // run the query
@@ -238,17 +247,17 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 	    
 	  // default for get_post_meta is true. this is, if we're using ez_wp_query then we always want the post's post_meta unless we specify otherwise.
 	  if ( ! isset($arr_args_ez['get_post_meta']) || ( isset($arr_args_ez['get_post_meta']) && $arr_args_ez['get_post_meta'] !== false) ){
-	    // foreach ($wp_query->posts as $wp_query_obj){
-		//  $wp_query_obj->get_post_meta = get_post_meta($wp_query_obj->ID);
-		// }
 		$wp_query->posts = self::ez_get_post_meta($wp_query->posts);
 	  }
 
-        // default for get_post_meta is true. this is, if we're using ez_wp_query then we always want the post's post_meta unless we specify otherwise.
+        // default for get_post_thumbnail_id is true. this is, if we're using ez_wp_query then we always want the post's get_post_thumbnail_id unless we specify otherwise.
+        if ( ! isset($arr_args_ez['get_post_thumbnail_id']) || ( isset($arr_args_ez['get_post_thumbnail_id']) && $arr_args_ez['get_post_thumbnail_id'] !== false ) ){
+            $wp_query->posts = self::ez_get_post_thumbnail_id($wp_query->posts);
+        }
+
+
+        // default for ez_get_post_class is true. this is, if we're using ez_wp_query then we always want the post's ez_get_post_class unless we specify otherwise.
         if ( ! isset($arr_args_ez['get_post_class']) || ( isset($arr_args_ez['get_post_class']) && $arr_args_ez['get_post_class'] !== false) ){
-            // foreach ($wp_query->posts as $wp_query_obj){
-            //  $wp_query_obj->get_post_meta = get_post_meta($wp_query_obj->ID);
-            // }
             $wp_query->posts = self::ez_get_post_class($wp_query->posts);
         }
 	  
@@ -290,20 +299,23 @@ if ( ! class_exists('Class_WP_ezClasses_ezCore_Static_Helpers')) {
 	  // Ref: http://codex.wordpress.org/Function_Reference/wp_get_post_terms
 	  
 	  $wp_query->posts = self::ez_wp_get_post_terms( $wp_query->posts, $arr_args_ez['taxonomies'], $arr_gpt_args );
-	  
-	  /*
-	  $arr_tax_terms = array();
-	  foreach ($wp_query->posts as $wp_query_obj){
-		  
-		foreach ($arr_args_ez['taxonomies'] as $str_tax_name){
-		  $arr_tax_terms[$str_tax_name] = wp_get_post_terms($wp_query_obj->ID, $str_tax_name, $arr_gpt_args);
-		}
-		// we add the property wp_get_post_terms and that value an assoc array w/ the various tax(s) being the ['key']s.
-		$wp_query_obj->wp_get_post_terms = $arr_tax_terms;
-	  }
-	  */
+
 	  return $wp_query;
 	}
+
+
+        /**
+         * Similar to get_post_thumbnail_id() but loops over the whole $posts object
+         *
+         * TODO - comments
+         */
+        static public function ez_get_post_thumbnail_id( $arr_posts = array()){
+
+            foreach ($arr_posts as $obj_post){
+                $obj_post->get_post_thumbnail_id = ez_get_post_thumbnail_id($obj_post->ID);
+            }
+            return $arr_posts;
+        }
 	
 	/**
 	 * Similar to get_post_meta() but loops over the whole $posts object
